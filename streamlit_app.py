@@ -2,8 +2,8 @@ import streamlit as st
 from streamlit_option_menu import option_menu
 import pickle 
 
-model_dia = pickle.load(open('/Users/akshitrawat/Desktop/python/diabetes_model.sav','rb'))
-model_park= pickle.load(open("/Users/akshitrawat/Desktop/python/parkinsons_model.sav",'rb'))
+model_dia = pickle.load(open('diabetes_model.sav','rb'))
+model_park= pickle.load(open("parkinsons_model.sav",'rb'))
 
 with st.sidebar:
     Selected = option_menu("Multiple Disease Prediction system",
