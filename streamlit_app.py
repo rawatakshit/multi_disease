@@ -1,6 +1,18 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
-import pickle 
+import pickle
+import tensorflow as tf
+from tensorflow.keras.preprocessing import image
+import numpy as np
+from PIL import Image
+
+# Load models
+@st.cache_resource
+def load_brain_model():
+    return tf.keras.models.load_model(r'C:\Users\Ashish\Desktop\EEG_Epilepsy\Tumor.h5')
+
+# model_dia = load_brain_model() #testing purpose
+brain_model = load_brain_model()
 
 model_dia = pickle.load(open('diabetes_model.sav','rb'))
 model_park= pickle.load(open("parkinsons_model.sav",'rb'))
@@ -47,12 +59,38 @@ if (Selected ==  'Diabetes Prediction'):
     
     st.success(res)
 
-# if (Selected ==  'Heart Disease Prediction'):
+# Brain Tumor Prediction
+if Selected == 'Brain Tumour':
+    st.title("Brain Tumor Detection")
+    st.write("Upload an MRI image and click the 'Predict' button to see if it contains a tumor.")
 
+    uploaded_file = st.file_uploader("Choose an MRI image...", type=["jpg", "png"])
+    if uploaded_file is not None:
+        col1, col2 = st.columns([2, 3])
+        with col1:
+            st.image(uploaded_file, caption='Uploaded MRI Image', use_column_width=True)
 
+        with col2:
+            if st.button("Predict", key="prediction-result"):
+                st.write("Classifying...", key="prediction-result")
 
-# if (Selected ==  'Brain Tumour'):
+                img = Image.open(uploaded_file)
+                img = img.resize((150, 150))
+                img_array = image.img_to_array(img) / 255.0
+                img_array = np.expand_dims(img_array, axis=0)
 
+                prediction = brain_model.predict(img_array)
+                predicted_class = (prediction > 0.5).astype("int32")
+
+                if predicted_class == 1:
+                    st.markdown("<h3 style='color: green;'>Tumor detected</h3>", unsafe_allow_html=True)
+                else:
+                    st.markdown("<h3 style='color: red;'>No tumor detected</h3>", unsafe_allow_html=True)
+
+# Heart Disease Prediction
+if Selected == 'Heart Disease Prediction':
+    st.title("Heart Disease Prediction")
+    st.write("Feature under development.")
 
 
 if (Selected ==  'Parkinsons'):
