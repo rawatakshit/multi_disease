@@ -59,7 +59,6 @@ if (Selected ==  'Diabetes Prediction'):
 
 # Brain Tumor Prediction
 if Selected == 'Brain Tumour':
-    if Selected == 'Brain Tumour':
     st.title("Brain Tumor Detection")
     st.write("Upload an MRI image and click the 'Predict' button to see if it contains a tumor.")
 
