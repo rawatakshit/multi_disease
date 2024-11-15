@@ -34,7 +34,7 @@ if (Selected ==  'Diabetes Prediction'):
     with col2:
         hypertension= st.text_input("Hypertension (1 for yes/ 0 for no)")
     with col1:
-        heart_disease=st.text_input("Heat Disease (1 for yes/ 0 for no)")
+        heart_disease=st.text_input("Heart Disease (1 for yes/ 0 for no)")
     with col2:
         bmi=st.text_input("BMI")
     with col1:
