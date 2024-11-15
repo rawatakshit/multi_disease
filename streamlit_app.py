@@ -6,55 +6,44 @@ from tensorflow.keras.preprocessing import image
 import numpy as np
 from PIL import Image
 
-model_dia = pickle.load(open('diabetes_model.sav','rb'))
-model_park= pickle.load(open("parkinsons_model.sav",'rb'))
-
 # Load models
 @st.cache_resource
 def load_brain_model():
-    return tf.keras.models.load_model(r'Tumor.h5')
+    return tf.keras.models.load_model(r'C:\Users\Ashish\Desktop\EEG_Epilepsy\Tumor.h5')
+
+model_dia = pickle.load(open('diabetes_model.sav', 'rb'))
+# model_dia = load_brain_model() #testing purpose
 brain_model = load_brain_model()
 
+# Sidebar navigation
 with st.sidebar:
-    Selected = option_menu("Multiple Disease Prediction system",
-                           ["Diabetes Prediction",
-                            "Heart Disease Prediction",
-                            "Brain Tumour ",
-                            "Parkinsons"]
-                            )
+    Selected = option_menu(
+        "Multiple Disease Prediction System",
+        ["Diabetes Prediction", "Heart Disease Prediction", "Brain Tumour", "Parkinsons"]
+    )
 
-#Diabetes
-if (Selected ==  'Diabetes Prediction'):
-
+# Diabetes Prediction
+if Selected == 'Diabetes Prediction':
     st.title("Diabetes Prediction")
-    
-    col1,col2=st.columns(2)
 
+    col1, col2 = st.columns(2)
     with col1:
-        age= st.text_input("Age")
+        age = st.text_input("Age")
     with col2:
-        hypertension= st.text_input("Hypertension (1 for yes/ 0 for no)")
+        hypertension = st.text_input("Hypertension (1 for yes / 0 for no)")
     with col1:
-        heart_disease=st.text_input("Heat Disease (1 for yes/ 0 for no)")
+        heart_disease = st.text_input("Heart Disease (1 for yes / 0 for no)")
     with col2:
-        bmi=st.text_input("BMI")
+        bmi = st.text_input("BMI")
     with col1:
-        HbA1c_level=st.text_input("HBA1C Level")
+        HbA1c_level = st.text_input("HbA1c Level")
     with col2:
-        blood_glucose_level=st.text_input("Glucose Level")
+        blood_glucose_level = st.text_input("Glucose Level")
 
-    #result 
-    res=''
-    
-    #button
+    res = ''
     if st.button("Diabetes Result"):
-        diab_prediction =model_dia.predict([[age,hypertension,heart_disease,bmi,HbA1c_level,blood_glucose_level]])
-        
-        if diab_prediction[0]==1:
-            res='The Person is Diabetec'
-        else:
-            res="The Person is not Diabetec"
-    
+        diab_prediction = model_dia.predict([[age, hypertension, heart_disease, bmi, HbA1c_level, blood_glucose_level]])
+        res = 'The person is Diabetic' if diab_prediction[0] == 1 else 'The person is not Diabetic'
     st.success(res)
 
 # Brain Tumor Prediction
@@ -85,7 +74,6 @@ if Selected == 'Brain Tumour':
                 else:
                     st.markdown("<h3 style='color: red;'>No tumor detected</h3>", unsafe_allow_html=True)
 
-    
 # Heart Disease Prediction
 if Selected == 'Heart Disease Prediction':
     st.title("Heart Disease Prediction")
