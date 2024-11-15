@@ -9,7 +9,7 @@ from PIL import Image
 # Load models
 @st.cache_resource
 def load_brain_model():
-    return tf.keras.models.load_model(r'C:\Users\Ashish\Desktop\EEG_Epilepsy\Tumor.h5')
+    return tf.keras.models.load_model(r'Tumor.h5')
 
 model_dia = pickle.load(open('diabetes_model.sav', 'rb'))
 # model_dia = load_brain_model() #testing purpose
