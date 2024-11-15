@@ -23,27 +23,36 @@ with st.sidebar:
     )
 
 # Diabetes Prediction
-if Selected == 'Diabetes Prediction':
+if (Selected ==  'Diabetes Prediction'):
+
     st.title("Diabetes Prediction")
+    col1,col2=st.columns(2)
 
-    col1, col2 = st.columns(2)
     with col1:
-        age = st.text_input("Age")
+        age= st.text_input("Age")
     with col2:
-        hypertension = st.text_input("Hypertension (1 for yes / 0 for no)")
+        hypertension= st.text_input("Hypertension (1 for yes/ 0 for no)")
     with col1:
-        heart_disease = st.text_input("Heart Disease (1 for yes / 0 for no)")
+        heart_disease=st.text_input("Heat Disease (1 for yes/ 0 for no)")
     with col2:
-        bmi = st.text_input("BMI")
+        bmi=st.text_input("BMI")
     with col1:
-        HbA1c_level = st.text_input("HbA1c Level")
+        HbA1c_level=st.text_input("HBA1C Level")
     with col2:
-        blood_glucose_level = st.text_input("Glucose Level")
+        blood_glucose_level=st.text_input("Glucose Level")
 
-    res = ''
+    #result
+    res=''
+
+    #button
     if st.button("Diabetes Result"):
-        diab_prediction = model_dia.predict([[age, hypertension, heart_disease, bmi, HbA1c_level, blood_glucose_level]])
-        res = 'The person is Diabetic' if diab_prediction[0] == 1 else 'The person is not Diabetic'
+        diab_prediction =model_dia.predict([[age,hypertension,heart_disease,bmi,HbA1c_level,blood_glucose_level]])
+
+        if diab_prediction[0]==1:
+            res='The Person is Diabetec'
+        else:
+            res="The Person is not Diabetec"
+
     st.success(res)
 
 # Brain Tumor Prediction
@@ -73,11 +82,6 @@ if Selected == 'Brain Tumour':
                     st.markdown("<h3 style='color: green;'>Tumor detected</h3>", unsafe_allow_html=True)
                 else:
                     st.markdown("<h3 style='color: red;'>No tumor detected</h3>", unsafe_allow_html=True)
-
-# Heart Disease Prediction
-if Selected == 'Heart Disease Prediction':
-    st.title("Heart Disease Prediction")
-    st.write("Feature under development.")
 
 
 if (Selected ==  'Parkinsons'):
