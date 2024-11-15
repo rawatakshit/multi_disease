@@ -12,6 +12,7 @@ def load_brain_model():
     return tf.keras.models.load_model(r'Tumor.h5')
 
 model_dia = pickle.load(open('diabetes_model.sav', 'rb'))
+model_park = pickle.load(opne('parkinsons_model.sav','rb')) 
 # model_dia = load_brain_model() #testing purpose
 brain_model = load_brain_model()
 
