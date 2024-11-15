@@ -19,7 +19,7 @@ brain_model = load_brain_model()
 with st.sidebar:
     Selected = option_menu(
         "Multiple Disease Prediction System",
-        ["Diabetes Prediction", "Heart Disease Prediction", "Brain Tumour", "Parkinsons"]
+        ["Diabetes Prediction","Brain Tumour", "Parkinsons"]
     )
 
 # Diabetes Prediction
