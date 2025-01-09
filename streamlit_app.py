@@ -12,8 +12,8 @@ def load_brain_model():
     return tf.keras.models.load_model(r'Tumor.h5')
 
 model_dia = pickle.load(open('diabetes_model.sav', 'rb'))
+scaler = pickle.load(open('scaler.sav', 'rb'))
 model_park = pickle.load(open('parkinsons_model.sav','rb')) 
-# model_dia = load_brain_model() #testing purpose
 brain_model = load_brain_model()
 
 # Sidebar navigation
@@ -23,39 +23,48 @@ with st.sidebar:
         ["Diabetes Prediction","Brain Tumour", "Parkinsons"]
     )
 
+
 # Diabetes Prediction
-if (Selected ==  'Diabetes Prediction'):
+if Selected == 'Diabetes Prediction':
 
     st.title("Diabetes Prediction")
-    col1,col2=st.columns(2)
+    col1, col2 = st.columns(2)
 
     with col1:
-        age= st.text_input("Age")
+        gender = st.text_input('Gender (1 for Male, 0 for Female, 2 for Other)')
     with col2:
-        hypertension= st.text_input("Hypertension (1 for yes/ 0 for no)")
+        age = st.text_input("Age")
     with col1:
-        heart_disease=st.text_input("Heart Disease (1 for yes/ 0 for no)")
+        hypertension = st.text_input("Hypertension (1 for Yes, 0 for No)")
     with col2:
-        bmi=st.text_input("BMI")
+        heart_disease = st.text_input("Heart Disease (1 for Yes, 0 for No)")
     with col1:
-        HbA1c_level=st.text_input("HBA1C Level")
+        bmi = st.text_input("BMI")
     with col2:
-        blood_glucose_level=st.text_input("Glucose Level")
+        HbA1c_level = st.text_input("HbA1c Level")
+    with col1:
+        blood_glucose_level = st.text_input("Blood Glucose Level")
 
-    #result
-    res=''
+    # Result
+    res = ''
 
-    #button
-    if st.button("Diabetes Result"):
-        diab_prediction =model_dia.predict([[age,hypertension,heart_disease,bmi,HbA1c_level,blood_glucose_level]])
-
-        if diab_prediction[0]==1:
-            res='The Person is Diabetec'
+    # Prediction function
+    def diabetes_prediction(input_data):
+        input_array = np.asarray(input_data)
+        input_reshape = input_array.reshape(1, -1)
+        std_data = scaler.transform(input_reshape)  # Standardize using the trained scaler
+        prediction = model_dia.predict(std_data)
+        if prediction[0] == 0:
+            return "The Person is Not Diabetic"
         else:
-            res="The Person is not Diabetec"
+            return "The Person is Diabetic"
 
-    st.success(res)
-
+    # Button
+    if st.button("Diabetes Result"):
+        res = diabetes_prediction([gender, age, hypertension, heart_disease, bmi, HbA1c_level, blood_glucose_level])
+        st.success(res)
+        
+    
 # Brain Tumor Prediction
 if Selected == 'Brain Tumour':
     st.title("Brain Tumor Detection")
