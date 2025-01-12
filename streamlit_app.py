@@ -13,7 +13,8 @@ def load_brain_model():
 
 model_dia = pickle.load(open('diabetes_model.sav', 'rb'))
 scaler = pickle.load(open('scaler.sav', 'rb'))
-model_park = pickle.load(open('parkinsons_model.sav','rb')) 
+model_park = pickle.load(open('parkinsons_model.sav','rb'))
+model_heart=pickle.load(open("heart_disease_model.sav",'rb'))
 brain_model = load_brain_model()
 
 # Sidebar navigation
@@ -32,20 +33,15 @@ if Selected == 'Diabetes Prediction':
 
     with col1:
         gender = st.text_input('Gender (1 for Male, 0 for Female, 2 for Other)')
+        hypertension = st.text_input("Hypertension (1 for Yes, 0 for No)")
+        bmi = st.text_input("BMI")
+        blood_glucose_level = st.text_input("Blood Glucose Level")
     with col2:
         age = st.text_input("Age")
-    with col1:
-        hypertension = st.text_input("Hypertension (1 for Yes, 0 for No)")
-    with col2:
         heart_disease = st.text_input("Heart Disease (1 for Yes, 0 for No)")
-    with col1:
-        bmi = st.text_input("BMI")
-    with col2:
         HbA1c_level = st.text_input("HbA1c Level")
-    with col1:
-        blood_glucose_level = st.text_input("Blood Glucose Level")
 
-    # Result
+     # Result
     res = ''
 
     # Prediction function
@@ -94,6 +90,7 @@ if Selected == 'Brain Tumour':
                     st.markdown("<h3 style='color: red;'>No tumor detected</h3>", unsafe_allow_html=True)
 
 
+#  Parkinsons Prediction
 if (Selected ==  'Parkinsons'):
     
     st.title("Parkinsons Prediction:")
@@ -102,46 +99,28 @@ if (Selected ==  'Parkinsons'):
     
     with col1:
         MDVPFo_Hz= st.text_input("MDVP:Fo(Hz)")
-    with col2:
-        hMDVPFhi_Hz= st.text_input("MDVP:Fhi(Hz)")
-    with col3:
-        hMDVPFlo_Hz=st.text_input("MDVP:Flo(Hz)")
-    with col1:
         MDVPJitter_Abs=st.text_input("MDVP:Jitter(Abs)")
-    with col2:
-        MDVp_RAP=st.text_input("MDVP:RAP")
-    with col3:
-        MDVp_PPQ=st.text_input("MDVP:PPQ")
-    with col1:
         Jitter_DDP= st.text_input("Jitter:DDP")
-    with col2:
-        MDVP_Shimmer= st.text_input("MDVP:Shimmer")
-    with col3:
-        MDVP_ShimmerdB=st.text_input("MDVP:Shimmer(dB)")
-    with col1:
         Shimmer_APQ3=st.text_input("Shimmer:APQ3")
-    with col2:
-        Shimmer_APQ5=st.text_input("Shimmer:APQ5")
-    with col3:
-        MDVp_APQ=st.text_input("MDVP:APQ")
-    with col1:
         Shimmer_DDA= st.text_input("Shimmer:DDA")
-    with col2:
-        NHr= st.text_input("NHR")
-    with col3:
-        HNr= st.text_input("HNR")
-    with col1:
         RPDe=st.text_input("RPDE")
-    with col2:
-        DFa=st.text_input("DFA")
-    
-    with col3:
-        spread1=st.text_input("spread1")
-    with col1:
         spread2=st.text_input("spread2")
     with col2:
+        hMDVPFhi_Hz= st.text_input("MDVP:Fhi(Hz)")
+        MDVp_RAP=st.text_input("MDVP:RAP")
+        MDVP_Shimmer= st.text_input("MDVP:Shimmer")
+        Shimmer_APQ5=st.text_input("Shimmer:APQ5")
+        NHr= st.text_input("NHR")
+        DFa=st.text_input("DFA")
         d2=st.text_input("D2")
-    with col3: 
+
+    with col3:
+        hMDVPFlo_Hz=st.text_input("MDVP:Flo(Hz)")
+        MDVp_PPQ=st.text_input("MDVP:PPQ")
+        MDVP_ShimmerdB=st.text_input("MDVP:Shimmer(dB)")
+        MDVp_APQ=st.text_input("MDVP:APQ")
+        HNr= st.text_input("HNR")
+        spread1=st.text_input("spread1")
         PPe=st.text_input("PPE")    
 
 #result 
@@ -157,3 +136,60 @@ if (Selected ==  'Parkinsons'):
             res4="The Person has Parkinsons"
     
     st.success(res4)
+
+
+# Heart Disease Prediction in Streamlit
+if Selected == 'Heart Disease':
+    st.title("Heart Disease Prediction")
+    col1, col2 = st.columns(2)
+
+    # Collect inputs
+    with col1:
+        age = st.text_input('Age', key="heart_age")
+        cp = st.text_input("Chest Pain Type (cp)")
+        chol = st.text_input("Cholesterol (chol)")
+        restecg = st.text_input("Resting ECG (restecg)")
+        exang = st.text_input("Exercise Induced Angina (exang)")
+        slope = st.text_input("Slope of ST Segment (slope)")
+        thal = st.text_input("Thalassemia (thal)")
+    with col2:
+        sex = st.text_input("Gender (1 for Male, 0 for Female)",key="heart_sex")
+        trestbps = st.text_input("Resting Blood Pressure (trestbps)")
+        fbs = st.text_input("Fasting Blood Sugar (fbs)")
+        thalach = st.text_input("Maximum Heart Rate Achieved (thalach)")
+        oldpeak = st.text_input("ST Depression (oldpeak)")
+        ca = st.text_input("Number of Major Vessels (ca)")
+    
+
+    # Result
+    result = ''
+
+    # Function to predict heart disease
+    def heart_prediction(data):
+        # Convert input to numpy array
+        array = np.asarray(data, dtype=float)  # Ensure all data is numeric
+        data_reshape = array.reshape(1, -1)
+        prediction = model_heart.predict(data_reshape)
+        if prediction[0] == 0:
+                 return "The Person does not have Heart Disease"
+        else:
+                return "The Person has Heart Disease"
+
+    # Button for prediction
+    if st.button("Heart Disease Result"):
+        # Validate and convert inputs to float
+        try:
+            inputs = [
+                float(age), float(sex), float(cp), float(trestbps), float(chol), float(fbs),
+                float(restecg), float(thalach), float(exang), float(oldpeak), float(slope),
+                float(ca), float(thal)
+            ]
+            result = heart_prediction(inputs)
+        except ValueError:
+            result = "Please enter valid numeric values for all fields."
+
+        st.success(result)
+
+
+
+
