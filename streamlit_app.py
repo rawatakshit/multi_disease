@@ -45,60 +45,22 @@ if Selected == 'Diabetes Prediction':
     res = ''
 
     # Prediction function
-   error_flag = False
-try:
-    gender = int(gender)
-    age = float(age)
-    hypertension = int(hypertension)
-    heart_disease = int(heart_disease)
-    bmi = float(bmi)
-    hba1c = float(hba1c)
-    glucose = float(glucose)
+   def diabetes_prediction(input_data):
+        input_array = np.asarray(input_data)
+        input_reshape = input_array.reshape(1, -1)
+        std_data = scaler.transform(input_reshape)  # Standardize using the trained scaler
+        prediction = model_dia.predict(std_data)
+        if prediction[0] == 0:
+            return "The Person is Not Diabetic"
+        else:
+            return "The Person is Diabetic"
 
-    # Check for valid ranges
-    if gender not in [0, 1, 2]:
-        st.error("Invalid input for gender. Enter 0 (Female), 1 (Male), or 2 (Other).")
-        error_flag = True
-    if age < 0 or age > 120:
-        st.error("Invalid input for age. Enter a value between 0 and 120.")
-        error_flag = True
-    if hypertension not in [0, 1]:
-        st.error("Invalid input for hypertension. Enter 0 (No) or 1 (Yes).")
-        error_flag = True
-    if heart_disease not in [0, 1]:
-        st.error("Invalid input for heart disease. Enter 0 (No) or 1 (Yes).")
-        error_flag = True
-    if bmi <= 0:
-        st.error("Invalid input for BMI. Enter a positive value.")
-        error_flag = True
-    if hba1c <= 0:
-        st.error("Invalid input for HbA1c Level. Enter a positive value.")
-        error_flag = True
-    if glucose <= 0:
-        st.error("Invalid input for glucose level. Enter a positive value.")
-        error_flag = True
-
-except ValueError:
-    st.error("Please enter valid numeric values for all fields.")
-    error_flag = True
-
-# Prediction button and result
-if st.button("Predict Diabetes"):
-    if not error_flag:
-        # Prepare input array
-        input_data = np.array([gender, age, hypertension, heart_disease, bmi, hba1c, glucose])
-        input_data_reshaped = input_data.reshape(1, -1)
-
-        # Scale the input data
-        scaled_input = scaler.transform(input_data_reshaped)
-
-        # Make prediction
-        prediction = model.predict(scaled_input)
-        result = "Diabetic" if prediction[0] == 1 else "Not Diabetic"
-        st.success(f"The patient is: {result}")
-    else:
-        st.error("Please correct the errors above before making a prediction.")
-    
+    # Button
+    if st.button("Diabetes Result"):
+        res = diabetes_prediction([gender, age, hypertension, heart_disease, bmi, HbA1c_level, blood_glucose_level])
+        st.success(res)
+        
+        
 # Brain Tumor Prediction
 if Selected == 'Brain Tumour':
     st.title("Brain Tumor Detection")
